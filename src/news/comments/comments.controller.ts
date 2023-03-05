@@ -8,7 +8,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
-import { Comments } from './comments.interface';
+// import { Comments } from './comments.interface';
+import { CommentsCreateDto } from '../dtos/comments-create.dto/comments-create.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -24,7 +25,10 @@ export class CommentsController {
   }
 
   @Post('/:idNews')
-  async create(@Param('idNews') idNews, @Body() comment): Promise<Comments> {
+  async create(
+    @Param('idNews') idNews,
+    @Body() comment,
+  ): Promise<CommentsCreateDto> {
     return this.commentsService.create(idNews, comment);
   }
 
@@ -33,12 +37,9 @@ export class CommentsController {
     @Param('idNews') idNews,
     @Param('idComment') idComment,
     @Body() comment,
-  ): Promise<Comments | string> {
+  ): Promise<CommentsCreateDto | boolean> {
     const idNewsInt = parseInt(idNews);
-    const isEdited = this.commentsService.update(idNewsInt, idComment, comment);
-    return isEdited
-      ? 'Комментарий отредактирован'
-      : 'Комментарий не отредактирован - передан неверный id';
+    return this.commentsService.update(idNewsInt, idComment, comment);
   }
 
   @Delete('/:idNews/:idComment')

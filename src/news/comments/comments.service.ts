@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Comments } from './comments.interface';
+import { CommentsCreateDto } from '../dtos/comments-create.dto/comments-create.dto';
 
 @Injectable()
 export class CommentsService {
@@ -45,7 +46,7 @@ export class CommentsService {
     idNews: number,
     idComment: string,
     comment: Comment,
-  ): Comment | boolean {
+  ): CommentsCreateDto | boolean {
     const indexComment = this.comments[idNews]?.findIndex(
       (c) => c.id === idComment,
     );

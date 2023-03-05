@@ -10,6 +10,7 @@ export class NewsService {
       description: 'description1',
       author: 'qwerty1',
       createdAt: new Date(),
+      cover: 'news-static/4af33534-f267-461f-bfbe-7cd07f96c4cd.jpg',
     },
     {
       id: 2,

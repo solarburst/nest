@@ -1,30 +1,53 @@
 import { Injectable } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
-import { Comments } from './comments.interface';
-import { CommentsCreateDto } from '../dtos/comments-create.dto/comments-create.dto';
+import { CreateCommentDto } from './dtos/create-comment-dto';
+
+export type Comment = {
+  id?: number;
+  message: string;
+  author: string;
+};
+
+export type CommentEdit = {
+  id?: number;
+  message?: string;
+  author?: string;
+};
 
 @Injectable()
 export class CommentsService {
-  private readonly comments = [];
+  private readonly comments = {};
 
-  create(idNews: number, comment: Comments): Comments {
-    if (!this.comments?.[idNews]) {
+  create(idNews: number, comment: CreateCommentDto) {
+    if (!this.comments[idNews]) {
       this.comments[idNews] = [];
     }
 
-    return this.comments[idNews].push({
+    const newComment = { ...comment, id: 1 };
+    this.comments[idNews].push(newComment);
+    return newComment;
+  }
+
+  edit(idNews: number, idComment: number, comment: CommentEdit) {
+    const indexComment = this.comments[idNews]?.findIndex(
+      (c) => c.id === idComment,
+    );
+
+    if (!this.comments[idNews] || indexComment === -1) {
+      return false;
+    }
+
+    this.comments[idNews][indexComment] = {
+      ...this.comments[idNews][indexComment],
       ...comment,
-      id: uuidv4(),
-    });
-
-    return comment;
+    };
+    return this.comments[idNews][indexComment];
   }
 
-  findAll(idNews: number): Comments[] | undefined {
-    return this.comments?.[idNews];
+  find(idNews: number): CreateCommentDto[] | null {
+    return this.comments[idNews] || null;
   }
 
-  remove(idNews: number, idComment: string): Promise<boolean> {
+  remove(idNews: number, idComment: number): Comment[] | null {
     if (!this.comments[idNews]) {
       return null;
     }
@@ -36,29 +59,5 @@ export class CommentsService {
       return null;
     }
     return this.comments[idNews].splice(indexComment, 1);
-  }
-
-  removeAll(idNews: number): boolean {
-    return delete this.comments?.[idNews];
-  }
-
-  update(
-    idNews: number,
-    idComment: string,
-    comment: Comment,
-  ): CommentsCreateDto | boolean {
-    const indexComment = this.comments[idNews]?.findIndex(
-      (c) => c.id === idComment,
-    );
-
-    if (!this.comments?.[idNews] || indexComment) {
-      return false;
-    }
-
-    this.comments[idNews][indexComment] = {
-      ...this.comments[idNews][indexComment],
-      ...comment,
-    };
-    return this.comments[idNews][indexComment];
   }
 }

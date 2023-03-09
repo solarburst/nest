@@ -1,20 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
 
 const publicPath = './public';
-let path = publicPath;
+let path: string = publicPath;
 
 export class HelperFileLoader {
-  set path(_path) {
+  path: string;
+  static set path(_path: string) {
     path = publicPath + _path;
   }
 
-  public customFileName(req, file, cb) {
+  public static customFileName(req, file, cb) {
     const originalName = file.originalname.split('.');
     const fileExtension = originalName[originalName.length - 1];
     cb(null, `${uuidv4()}.${fileExtension}`);
   }
 
-  public destinationPath(req, file, cb) {
+  public static destinationPath(req, file, cb) {
     cb(null, path);
   }
 }

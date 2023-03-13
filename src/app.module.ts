@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { NewsModule } from './news/news.module';
 import { MailModule } from './mail/mail.module';
 import { UsersModule } from './users/users.module';
+import { UsersEntity } from './users/users.entity';
+import { NewsEntity } from './news/news.entity';
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { UsersModule } from './users/users.module';
       username: 'postgres',
       password: 'qweqweqwe',
       database: 'nest-news-blog',
-      entities: ['dist/**/*.entity{.ts,.js}'],
+      entities: [UsersEntity, NewsEntity],
       synchronize: true,
     }),
     ServeStaticModule.forRoot({

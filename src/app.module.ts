@@ -9,6 +9,8 @@ import { MailModule } from './mail/mail.module';
 import { UsersModule } from './users/users.module';
 import { UsersEntity } from './users/users.entity';
 import { NewsEntity } from './news/news.entity';
+import { CommentsEntity } from './news/comments/comments.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { NewsEntity } from './news/news.entity';
       username: 'postgres',
       password: 'qweqweqwe',
       database: 'nest-news-blog',
-      entities: [UsersEntity, NewsEntity],
+      entities: [UsersEntity, NewsEntity, CommentsEntity],
       synchronize: true,
     }),
     ServeStaticModule.forRoot({
@@ -28,6 +30,7 @@ import { NewsEntity } from './news/news.entity';
     NewsModule,
     MailModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

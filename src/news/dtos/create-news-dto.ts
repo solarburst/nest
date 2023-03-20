@@ -9,8 +9,5 @@ export class CreateNewsDto {
   @IsString()
   description: string;
 
-  @IsNotEmpty()
-  userId: string;
-
   cover: string;
 }
